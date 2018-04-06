@@ -17,7 +17,6 @@ class NoteService {
   }
 
   long postNote(Note note) {
-    // Note note = noteCreator.createNote(title, content);
     noteCreator.saveNote(note);
     return note.getId();
   }

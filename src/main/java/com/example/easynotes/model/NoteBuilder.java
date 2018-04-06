@@ -1,6 +1,6 @@
 package com.example.easynotes.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class NoteBuilder {
 
@@ -10,7 +10,7 @@ public class NoteBuilder {
 
   private String content;
 
-  private Date createdAt;
+  private LocalDate date;
 
   public static NoteBuilder builder() {
     return new NoteBuilder();
@@ -31,20 +31,20 @@ public class NoteBuilder {
     return this;
   }
 
-  public NoteBuilder withDate(Date createdAt) {
-    this.createdAt = createdAt;
+  public NoteBuilder withDate(LocalDate date) {
+    this.date = date;
     return this;
   }
 
   public Note build() {
-    return new Note(id, title, content, new Date());
+    return new Note(id, title, content, date);
   }
 
   public Note buildWithoutId(String title, String content) {
     return NoteBuilder.builder()
         .withTitle(title)
         .withContent(content)
-        .withDate(new Date())
+        .withDate(LocalDate.now())
         .build();
 
   }

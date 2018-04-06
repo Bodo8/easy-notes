@@ -1,27 +1,19 @@
 package com.example.easynotes.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "notes")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
-    allowGetters = true)
 public class Note {
 
   @Id
@@ -35,26 +27,17 @@ public class Note {
   private String content;
 
   @ApiModelProperty(required = true, example = "2017-08-27")
-  @Column(nullable = false, updatable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  @CreatedDate
-  private Date createdAt;
-
-  @ApiModelProperty(required = true, example = "2017-08-27")
-  @Column(nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  @LastModifiedDate
-  private Date updatedAt;
+  private LocalDate date = LocalDate.now();
 
   public Note() {
   }
 
   public Note(Long id, String title,
-      String content, Date createdAt) {
+      String content, LocalDate date) {
     this.id = id;
     this.title = title;
     this.content = content;
-    this.createdAt = createdAt;
+    this.date = date;
   }
 
   public Long getId() {
@@ -81,20 +64,12 @@ public class Note {
     this.content = content;
   }
 
-  public Date getCreatedAt() {
-    return createdAt;
+  public LocalDate getDate() {
+    return date;
   }
 
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Date getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
+  public void setDate(LocalDate date) {
+    this.date = date;
   }
 
   @Override
@@ -117,10 +92,7 @@ public class Note {
     if (content != null ? !content.equals(note.content) : note.content != null) {
       return false;
     }
-    if (createdAt != null ? !createdAt.equals(note.createdAt) : note.createdAt != null) {
-      return false;
-    }
-    return updatedAt != null ? updatedAt.equals(note.updatedAt) : note.updatedAt == null;
+    return date != null ? date.equals(note.date) : note.date == null;
   }
 
   @Override
@@ -128,8 +100,7 @@ public class Note {
     int result = id != null ? id.hashCode() : 0;
     result = 31 * result + (title != null ? title.hashCode() : 0);
     result = 31 * result + (content != null ? content.hashCode() : 0);
-    result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-    result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
+    result = 31 * result + (date != null ? date.hashCode() : 0);
     return result;
   }
 
@@ -139,8 +110,7 @@ public class Note {
         "id=" + id +
         ", title='" + title + '\'' +
         ", content='" + content + '\'' +
-        ", createdAt=" + createdAt +
-        ", updatedAt=" + updatedAt +
+        ", date=" + date +
         '}';
   }
 }
