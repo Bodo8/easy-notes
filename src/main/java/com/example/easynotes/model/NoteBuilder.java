@@ -1,16 +1,15 @@
 package com.example.easynotes.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class NoteBuilder {
 
   private Long id;
-
   private String title;
-
   private String content;
-
   private LocalDate date;
+  private List<Product> products;
 
   public static NoteBuilder builder() {
     return new NoteBuilder();
@@ -36,15 +35,21 @@ public class NoteBuilder {
     return this;
   }
 
-  public Note build() {
-    return new Note(id, title, content, date);
+  public NoteBuilder withProducts(List<Product> products) {
+    this.products = products;
+    return this;
   }
 
-  public Note buildWithoutId(String title, String content) {
+  public Note build() {
+    return new Note(id, title, content, date, products);
+  }
+
+  public Note buildWithoutId(String title, String content, List<Product> products) {
     return NoteBuilder.builder()
         .withTitle(title)
         .withContent(content)
         .withDate(LocalDate.now())
+        .withProducts(products)
         .build();
 
   }

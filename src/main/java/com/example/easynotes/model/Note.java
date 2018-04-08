@@ -1,45 +1,47 @@
 package com.example.easynotes.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "notes")
 @EntityListeners(AuditingEntityListener.class)
-public class Note {
+public class Note implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+
   private Long id;
-
-  @ApiModelProperty(required = true, example = "House")
   private String title;
-
-  @ApiModelProperty(required = true, example = "note note")
   private String content;
-
-  @ApiModelProperty(required = true, example = "2017-08-27")
   private LocalDate date = LocalDate.now();
+  private List<Product> products;
 
   public Note() {
   }
 
-  public Note(Long id, String title,
-      String content, LocalDate date) {
+  public Note(Long id, String title, String content, LocalDate date,
+      List<Product> products) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.date = date;
+    this.products = products;
   }
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "note_id")
   public Long getId() {
     return id;
   }
@@ -72,6 +74,15 @@ public class Note {
     this.date = date;
   }
 
+  @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
+  public List<Product> getProducts() {
+    return products;
+  }
+
+  public void setProducts(List<Product> products) {
+    this.products = products;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -92,7 +103,10 @@ public class Note {
     if (content != null ? !content.equals(note.content) : note.content != null) {
       return false;
     }
-    return date != null ? date.equals(note.date) : note.date == null;
+    if (date != null ? !date.equals(note.date) : note.date != null) {
+      return false;
+    }
+    return products != null ? products.equals(note.products) : note.products == null;
   }
 
   @Override
@@ -101,6 +115,7 @@ public class Note {
     result = 31 * result + (title != null ? title.hashCode() : 0);
     result = 31 * result + (content != null ? content.hashCode() : 0);
     result = 31 * result + (date != null ? date.hashCode() : 0);
+    result = 31 * result + (products != null ? products.hashCode() : 0);
     return result;
   }
 
@@ -111,6 +126,7 @@ public class Note {
         ", title='" + title + '\'' +
         ", content='" + content + '\'' +
         ", date=" + date +
+        ", products=" + products +
         '}';
   }
 }

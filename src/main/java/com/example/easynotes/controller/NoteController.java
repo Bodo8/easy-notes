@@ -1,6 +1,8 @@
 package com.example.easynotes.controller;
 
+import com.example.easynotes.exception.ResourceNotFoundException;
 import com.example.easynotes.model.Note;
+import com.example.easynotes.model.Purchase;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,7 @@ public class NoteController {
   @ResponseStatus(HttpStatus.CREATED)
   public Long postNote(
       @ApiParam(value = "note data")
-      @RequestBody Note note) throws IOException {
-    return service.postNote(note);
+      @RequestBody Purchase purchase) throws ResourceNotFoundException {
+    return service.postNote(purchase);
   }
 }
